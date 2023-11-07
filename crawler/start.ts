@@ -1,16 +1,33 @@
 import inquirer from 'inquirer';
+import { sources } from './sources';
+import { Source } from './sources/source';
 
-async function start() {
-  const answers = await inquirer.prompt([
-    {
-      type: 'list',
-      name: 'source',
-      message: 'Select source',
-      choices: ['Kemenag', 'Tanzil', 'Save'],
-    },
-  ]);
+class Crawler {
+  private source: Source;
 
-  console.log(answers);
+  async start() {
+    await this.selectSource();
+    await this.processSource();
+  }
+
+  private async selectSource() {
+    const answer = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'source',
+        message: 'Select source',
+        choices: Object.keys(sources),
+      },
+    ]);
+
+    const source = sources[answer.source];
+
+    this.source = new source();
+  }
+
+  private async processSource() {
+    await this.source.start();
+  }
 }
 
-start();
+new Crawler().start();
