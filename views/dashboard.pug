@@ -1,0 +1,48 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Iyed
+        link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css")
+    body 
+        section(class="section")
+            div(class="container")
+                h1(class="title") Today transaction
+                p(class="subtitle") 16/03/2024
+                div(class="block")
+                    button(class="button is-primary") Add Transaction
+                table(class="table is-fullwidth is-bordered is-hoverable")
+                    thead
+                        tr 
+                            th Timestamp
+                            th Type
+                            th Amount
+                            th Category
+                            th Tags
+                    tbody 
+                        tr 
+                            td 15:13:34
+                            td
+                                span(class="tag is-danger") expense
+                            td 40.000
+                            td Motor 
+                            td
+                                span(class="tag is-info") bensin 
+                        tr 
+                            td 17:33:34
+                            td
+                                span(class="tag is-danger") expense
+                            td 14.000
+                            td Makanan 
+                            td
+                                span(class="tag is-info") makanan
+                        tr 
+                            td 21:33:34
+                            td
+                                span(class="tag is-success") income
+                            td 100.000
+                            td Kerja 
+                            td
+                                span(class="tag is-info") freelance 
+                            
