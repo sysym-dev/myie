@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.ts"
+    "dev": "nodemon index.ts",
+    "migration:dev": "ts-node bin/migration.ts"
   },
   "repository": {
     "type": "git",
@@ -35,6 +36,7 @@
     "*.{js,ts,css,md}": "prettier --write"
   },
   "dependencies": {
+    "commander": "^12.0.0",
     "dotenv": "^16.4.5",
     "express": "^4.18.3",
     "express-flash-message": "^3.0.2",
