@@ -10,24 +10,30 @@ html(lang="en")
             div(class="container")
                 h1(class="title") New transaction
                 p(class="subtitle") 16/03/2024
-                form(action="") 
+                - const validationError = getFlashMessages('validation-error')
+                if validationError.length
+                    div(class="notification is-danger")
+                        ul
+                            each msg in validationError
+                                li=msg
+                form(action="/transactions/create" method="post") 
                     div(class="field is-grouped")
                         div(class="control")
                             div(class="select")
-                                select
-                                    option(value="") Income
-                                    option(value="") Expense
+                                select(name="type")
+                                    option(value="income") Income
+                                    option(value="expense") Expense
                         div(class="control")
                             div(class="select")
                                 select
                                     option(value="") Makanan
                                     option(value="") Minuman  
                         div(class="control")
-                            input(class="input" type="text", placeholder="Tags")
+                            input(class="input" type="text" placeholder="Tags")
                     div(class="field")
                         label(class="label") Amount
                         div(class="control")
-                            input(class="input" type="text", placeholder="Amount")
+                            input(class="input" type="number" name="amount" placeholder="Amount")
                     div(class="field")
                         label(class="label") Description
                         div(class="control")
@@ -36,4 +42,4 @@ html(lang="en")
                         div(class="control")
                             button(class="button is-primary") Save
                         div(class="control")
-                            button(class="button") Cancel
+                            a(href="/" class="button") Cancel
