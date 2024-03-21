@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { createTransactionSchema } from './schemas/create.schema';
 import { ZodError } from 'zod';
+import { createTransaction } from './transaction.service';
 
 const router = Router();
 
@@ -29,8 +30,10 @@ router
         next(err);
       }
     },
-    (req, res) => {
-      return res.json(req.body);
+    async (req, res) => {
+      await createTransaction(req.body);
+
+      return res.redirect('/');
     },
   );
 
