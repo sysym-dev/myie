@@ -19,4 +19,10 @@ program.command('migrate').action(async () => {
   process.exit(0);
 });
 
+program.command('rollback').action(async () => {
+  await database.migrate.rollback(config);
+
+  process.exit(0);
+});
+
 program.parse();
