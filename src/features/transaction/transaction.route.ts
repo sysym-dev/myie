@@ -30,10 +30,14 @@ router
         next(err);
       }
     },
-    async (req, res) => {
-      await createTransaction(req.body);
+    async (req, res, next) => {
+      try {
+        await createTransaction(req.body);
 
-      return res.redirect('/');
+        return res.redirect('/');
+      } catch (err) {
+        return next(err);
+      }
     },
   );
 

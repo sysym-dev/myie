@@ -29,6 +29,17 @@ routes.forEach((route) => {
   app.use(route);
 });
 
+app.use(
+  (
+    err: any,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction,
+  ) => {
+    return res.status(500).render('errors/500');
+  },
+);
+
 app.listen(port, () => {
   console.log(`app listen in ${port}`);
 });
