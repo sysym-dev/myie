@@ -10,6 +10,8 @@ router.get('/', async (req, res) => {
       direction: 'desc',
     },
     paginated: true,
+    page: 1,
+    limit: 2,
   });
 
   return res.render('dashboard', {
