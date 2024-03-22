@@ -1,0 +1,45 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Iyed
+        link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css")
+    body 
+        section(class="section")
+            div(class="container")
+                h1(class="title") New transaction
+                p(class="subtitle") 16/03/2024
+                - const validationError = getFlashMessages('validation-error')
+                if validationError.length
+                    div(class="notification is-danger")
+                        ul
+                            each msg in validationError
+                                li=msg
+                form(action="/transactions/create" method="post") 
+                    div(class="field is-grouped")
+                        div(class="control")
+                            div(class="select")
+                                select(name="type")
+                                    option(value="income") Income
+                                    option(value="expense") Expense
+                        div(class="control")
+                            div(class="select")
+                                select
+                                    option(value="") Makanan
+                                    option(value="") Minuman  
+                        div(class="control")
+                            input(class="input" type="text" placeholder="Tags")
+                    div(class="field")
+                        label(class="label") Amount
+                        div(class="control")
+                            input(class="input" type="number" name="amount" placeholder="Amount")
+                    div(class="field")
+                        label(class="label") Description
+                        div(class="control")
+                            textarea(class="textarea" placeholder="Description")
+                    div(class="field is-grouped")
+                        div(class="control")
+                            button(class="button is-primary") Save
+                        div(class="control")
+                            a(href="/" class="button") Cancel
