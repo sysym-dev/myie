@@ -10,11 +10,11 @@ html(lang="en")
             div(class="container")
                 h1(class="title") New transaction
                 p(class="subtitle") 16/03/2024
-                - const validationError = getFlashMessages('validation-error')
-                if validationError.length
+                - const errors = getFlashMessages('create-transaction-error')
+                if errors.length
                     div(class="notification is-danger")
                         ul
-                            each msg in validationError
+                            each msg in errors
                                 li=msg
                 form(action="/transactions/create" method="post") 
                     div(class="field is-grouped")
