@@ -28,9 +28,9 @@ html(lang="en")
                                 td=formatCurrency(transaction.amount)
                 nav(class="pagination")
                     if transactions.meta.hasPrev
-                        a(href="#" class="pagination-previous") Previous
+                        a(href=`?page=${transactions.meta.currentPage - 1}` class="pagination-previous") Previous
                     if transactions.meta.hasNext
-                        a(href="#" class="pagination-next") Next page
+                        a(href=`?page=${transactions.meta.currentPage + 1}` class="pagination-next") Next page
                     ul(class="pagination-list")
                         - for (let i = 1; i <= transactions.meta.totalPages; i++)
                             li
