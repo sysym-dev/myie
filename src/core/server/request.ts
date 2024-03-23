@@ -1,5 +1,3 @@
-import { Query, Request as ExpressRequest } from 'express-serve-static-core';
+import { Request } from 'express-serve-static-core';
 
-export interface Request<T extends Query> extends ExpressRequest {
-  query: T;
-}
+export type RequestQuery<T> = Request<{}, {}, {}, T>;
