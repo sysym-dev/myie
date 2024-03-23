@@ -6,11 +6,12 @@ export function validateSchema(
   options?: {
     path?: 'body' | 'query';
     redirectPath?: string;
+    key?: string;
   },
 ): express.RequestHandler {
   return async (req, res, next) => {
     try {
-      const output = await schema.parseAsync(req.body);
+      const output = await schema.parseAsync(req[options?.path ?? 'body']);
 
       req[options?.path ?? 'body'] = output;
 
@@ -18,7 +19,7 @@ export function validateSchema(
     } catch (err) {
       if (err instanceof ZodError) {
         err.errors.forEach((err) => {
-          res.flash('validation-error', err.message);
+          res.flash(options?.key ?? 'validation-error', err.message);
         });
 
         return res.redirect(options?.redirectPath ?? req.path);
