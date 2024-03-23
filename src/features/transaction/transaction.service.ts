@@ -50,7 +50,7 @@ export async function readTransactions(params?: {
       await database('transactions').count<[Record<'count', number>]>(
         '* as count',
       );
-    const totalPages = params.limit ? Math.max(meta.count / params.limit) : 1;
+    const totalPages = params.limit ? Math.ceil(meta.count / params.limit) : 1;
     const currentPage = params.page ?? 1;
 
     return {

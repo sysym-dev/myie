@@ -10,14 +10,19 @@ router
   .get((req, res) => {
     return res.render('transaction/create');
   })
-  .post(validateSchema(createTransactionSchema), async (req, res, next) => {
-    try {
-      await createTransaction(req.body);
+  .post(
+    validateSchema(createTransactionSchema, {
+      key: 'create-transaction-error',
+    }),
+    async (req, res, next) => {
+      try {
+        await createTransaction(req.body);
 
-      return res.redirect('/');
-    } catch (err) {
-      return next(err);
-    }
-  });
+        return res.redirect('/');
+      } catch (err) {
+        return next(err);
+      }
+    },
+  );
 
 export { router as transactionRoute };
