@@ -2,29 +2,28 @@ import { Router } from 'express';
 import { createTransactionSchema } from './schemas/create.schema';
 import { createTransaction } from './transaction.service';
 import { validateSchema } from '../../middlewares/validate-schema.middleware';
+import { handleRequest } from '../../middlewares/handle-request.middleware';
 
 const router = Router();
 
 router
   .route('/transactions/create')
-  .get((req, res) => {
-    return res.render('transaction/create', {
-      title: 'Create Transaction',
-    });
-  })
+  .get(
+    handleRequest((req, res) => {
+      return res.render('transaction/create', {
+        title: 'Create Transaction',
+      });
+    }),
+  )
   .post(
     validateSchema(createTransactionSchema, {
       key: 'create-transaction-error',
     }),
-    async (req, res, next) => {
-      try {
-        await createTransaction(req.body);
+    handleRequest(async (req, res) => {
+      await createTransaction(req.body);
 
-        return res.redirect('/');
-      } catch (err) {
-        return next(err);
-      }
-    },
+      return res.redirect('/');
+    }),
   );
 
 export { router as transactionRoute };
