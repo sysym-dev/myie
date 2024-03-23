@@ -19,31 +19,20 @@ html(lang="en")
                             th Timestamp
                             th Type
                             th Amount
-                            th Category
-                            th Tags
                     tbody 
-                        tr 
-                            td 15:13:34
-                            td
-                                span(class="tag is-danger") expense
-                            td 40.000
-                            td Motor 
-                            td
-                                span(class="tag is-info") bensin 
-                        tr 
-                            td 17:33:34
-                            td
-                                span(class="tag is-danger") expense
-                            td 14.000
-                            td Makanan 
-                            td
-                                span(class="tag is-info") makanan
-                        tr 
-                            td 21:33:34
-                            td
-                                span(class="tag is-success") income
-                            td 100.000
-                            td Kerja 
-                            td
-                                span(class="tag is-info") freelance 
+                        each transaction in transactions.rows
+                            tr 
+                                td=parseDate(transaction.created_at).format('YYYY-MM-DD HH:mm:ss')
+                                td
+                                    span(class=`tag ${transaction.type === 'income' ? 'is-success' : 'is-danger'}`)=transaction.type
+                                td=formatCurrency(transaction.amount)
+                nav(class="pagination")
+                    if transactions.meta.hasPrev
+                        a(href="#" class="pagination-previous") Previous
+                    if transactions.meta.hasNext
+                        a(href="#" class="pagination-next") Next page
+                    ul(class="pagination-list")
+                        - for (let i = 1; i <= transactions.meta.totalPages; i++)
+                            li
+                                a(href=`?page=${i}` class=`pagination-link ${i === transactions.meta.currentPage ? 'is-current' : ''}`)=i
                             
