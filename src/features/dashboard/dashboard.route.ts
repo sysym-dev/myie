@@ -31,6 +31,7 @@ router.get(
 
       return res.render('dashboard', {
         transactions,
+        title: 'Dashboard',
       });
     } catch (err) {
       return next(err);

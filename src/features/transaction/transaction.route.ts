@@ -8,7 +8,9 @@ const router = Router();
 router
   .route('/transactions/create')
   .get((req, res) => {
-    return res.render('transaction/create');
+    return res.render('transaction/create', {
+      title: 'Create Transaction',
+    });
   })
   .post(
     validateSchema(createTransactionSchema, {
