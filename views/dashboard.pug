@@ -26,4 +26,13 @@ html(lang="en")
                                 td
                                     span(class=`tag ${transaction.type === 'income' ? 'is-success' : 'is-danger'}`)=transaction.type
                                 td=formatCurrency(transaction.amount)
+                nav(class="pagination")
+                    if transactions.meta.hasPrev
+                        a(href="#" class="pagination-previous") Previous
+                    if transactions.meta.hasNext
+                        a(href="#" class="pagination-next") Next page
+                    ul(class="pagination-list")
+                        - for (let i = 1; i <= transactions.meta.totalPages; i++)
+                            li
+                                a(href="#" class=`pagination-link ${i === transactions.meta.currentPage ? 'is-current' : ''}`)=i
                             
