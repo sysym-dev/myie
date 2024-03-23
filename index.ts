@@ -3,12 +3,12 @@ import express from 'express';
 import session from 'express-session';
 import flash from 'express-flash-message';
 import { routes } from './src/routes';
-import dayjs from 'dayjs';
+import { parseDate } from './src/utils/date.util';
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.locals.parseDate = (date: string) => dayjs(date);
+app.locals.parseDate = parseDate;
 app.locals.formatCurrency = (val: string) =>
   new Intl.NumberFormat().format(Number(val));
 app.set('view engine', 'pug');

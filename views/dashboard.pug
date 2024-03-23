@@ -2,7 +2,7 @@ extends layouts/app
 
 block content
     h1(class="title") Today transaction
-    p(class="subtitle") 16/03/2024
+    p(class="subtitle")=parseDate().format('YYYY/MM/DD')
     div(class="block")
         a(href="transactions/create")
             button(class="button is-primary") Add Transaction
