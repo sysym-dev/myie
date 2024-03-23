@@ -34,5 +34,5 @@ html(lang="en")
                     ul(class="pagination-list")
                         - for (let i = 1; i <= transactions.meta.totalPages; i++)
                             li
-                                a(href="#" class=`pagination-link ${i === transactions.meta.currentPage ? 'is-current' : ''}`)=i
+                                a(href=`?page=${i}` class=`pagination-link ${i === transactions.meta.currentPage ? 'is-current' : ''}`)=i
                             
