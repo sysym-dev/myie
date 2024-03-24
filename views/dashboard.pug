@@ -2,8 +2,8 @@ extends layouts/app
 
 block content
     div(class="box")
-        h1(class="title") 25.000
-        p(class="subtitle") Current Balance
+        h1(class="title")=formatCurrency(user.balance)
+        p(class="subtitle") Balance
     div(class="block")
         h1(class="title") Today transaction
         p(class="subtitle")=parseDate().format('YYYY/MM/DD')

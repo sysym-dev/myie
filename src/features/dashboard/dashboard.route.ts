@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { RequestQuery } from '../../core/server/request';
 import { handleRequest } from '../../middlewares/handle-request.middleware';
 import { parseDate } from '../../utils/date.util';
+import { database } from '../../core/database/database';
 
 const router = Router();
 
@@ -31,6 +32,7 @@ router.get(
 
     return res.render('dashboard', {
       transactions,
+      user: await database('users').first(),
       title: 'Dashboard',
     });
   }),
