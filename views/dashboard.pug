@@ -1,31 +1,39 @@
 extends layouts/app
 
 block content
-    h1(class="title") Today transaction
-    p(class="subtitle")=parseDate().format('YYYY/MM/DD')
+    div(class="box")
+        h1(class="title") 25.000
+        p(class="subtitle") Current Balance
     div(class="block")
-        a(href="transactions/create")
-            button(class="button is-primary") Add Transaction
-    table(class="table is-fullwidth is-bordered is-hoverable")
-        thead
-            tr 
-                th Timestamp
-                th Type
-                th Amount
-        tbody 
-            each transaction in transactions.rows
+        h1(class="title") Today transaction
+        p(class="subtitle")=parseDate().format('YYYY/MM/DD')
+        div(class="block")
+            a(href="transactions/create")
+                button(class="button is-primary") Add Transaction
+        table(class="table is-fullwidth is-bordered is-hoverable")
+            thead
                 tr 
-                    td=parseDate(transaction.created_at).format('YYYY-MM-DD HH:mm:ss')
-                    td
-                        span(class=`tag ${transaction.type === 'income' ? 'is-success' : 'is-danger'}`)=transaction.type
-                    td=formatCurrency(transaction.amount)
-    nav(class="pagination")
-        if transactions.meta.hasPrev
-            a(href=`?page=${transactions.meta.currentPage - 1}` class="pagination-previous") Previous
-        if transactions.meta.hasNext
-            a(href=`?page=${transactions.meta.currentPage + 1}` class="pagination-next") Next page
-        ul(class="pagination-list")
-            - for (let i = 1; i <= transactions.meta.totalPages; i++)
-                li
-                    a(href=`?page=${i}` class=`pagination-link ${i === transactions.meta.currentPage ? 'is-current' : ''}`)=i
+                    th Timestamp
+                    th Type
+                    th Amount
+            tbody 
+                if !transactions.rows.length
+                    tr 
+                        td(colspan="3") No Transactions
+                else
+                    each transaction in transactions.rows
+                        tr 
+                            td=parseDate(transaction.created_at).format('YYYY-MM-DD HH:mm:ss')
+                            td
+                                span(class=`tag ${transaction.type === 'income' ? 'is-success' : 'is-danger'}`)=transaction.type
+                            td=formatCurrency(transaction.amount)
+        nav(class="pagination")
+            if transactions.meta.hasPrev
+                a(href=`?page=${transactions.meta.currentPage - 1}` class="pagination-previous") Previous
+            if transactions.meta.hasNext
+                a(href=`?page=${transactions.meta.currentPage + 1}` class="pagination-next") Next page
+            ul(class="pagination-list")
+                - for (let i = 1; i <= transactions.meta.totalPages; i++)
+                    li
+                        a(href=`?page=${i}` class=`pagination-link ${i === transactions.meta.currentPage ? 'is-current' : ''}`)=i
                             
