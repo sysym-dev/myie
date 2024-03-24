@@ -6,7 +6,7 @@ export function validateSchema(
   options?: {
     path?: 'body' | 'query';
     redirectPath?: string;
-    key?: string;
+    errorKey?: string;
   },
 ): express.RequestHandler {
   return async (req, res, next) => {
@@ -19,7 +19,7 @@ export function validateSchema(
     } catch (err) {
       if (err instanceof ZodError) {
         err.errors.forEach((err) => {
-          res.flash(options?.key ?? 'validation-error', err.message);
+          res.flash(options?.errorKey ?? 'validation-error', err.message);
         });
 
         return res.redirect(options?.redirectPath ?? req.path);

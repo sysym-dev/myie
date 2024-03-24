@@ -31,3 +31,13 @@ export async function findById(id: User['id']): Promise<User> {
 
   return user;
 }
+
+export async function findByEmail(email: User['email']): Promise<User> {
+  const user = await database<User>('users').where('email', email).first();
+
+  if (!user) {
+    throw new RecordNotFoundException();
+  }
+
+  return user;
+}

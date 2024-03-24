@@ -1,0 +1,22 @@
+extends ../layouts/app
+
+block content
+    h1(class="title") Login
+    p(class="subtitle") Login to your account
+    - const errors = getFlashMessages('login-error')
+    if errors.length
+        div(class="notification is-danger")
+            ul
+                each msg in errors
+                    li=msg
+    form(action="/login" method="post")
+        div(class="field")
+            label(class="label") Email
+            div(class="control")
+                input(class="input" type="email" name="email" placeholder="Email")
+        div(class="field")
+            label(class="label") Password
+            div(class="control")
+                input(class="input" type="password" name="password" placeholder="Password")
+        div(class="field")
+            button(class="button is-primary") Login
