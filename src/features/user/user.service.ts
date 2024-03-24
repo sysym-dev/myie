@@ -1,6 +1,7 @@
 import { Knex } from 'knex';
 import { database } from '../../core/database/database';
 import { User } from './user';
+import { RecordNotFoundException } from '../../exceptions/record-not-found.exception';
 
 export async function updateBalance(
   user: User,
@@ -19,4 +20,14 @@ export async function updateBalance(
     : query.decrement('balance', data.amount);
 
   await query.transacting(options.transaction);
+}
+
+export async function findById(id: User['id']): Promise<User> {
+  const user = await database<User>('users').where('id', id).first();
+
+  if (!user) {
+    throw new RecordNotFoundException();
+  }
+
+  return user;
 }
