@@ -5,6 +5,8 @@ import { z } from 'zod';
 import { RequestQuery } from '../../core/server/request';
 import { handleRequest } from '../../middlewares/handle-request.middleware';
 import { parseDate } from '../../utils/date.util';
+import { database } from '../../core/database/database';
+import { requireAuth } from '../../middlewares/require-auth.middleware';
 
 const router = Router();
 
@@ -14,6 +16,7 @@ const readSchema = z.object({
 
 router.get(
   '/',
+  requireAuth,
   validateSchema(readSchema, { path: 'query' }),
   handleRequest(async (req: RequestQuery<z.infer<typeof readSchema>>, res) => {
     const today = parseDate();
@@ -31,6 +34,7 @@ router.get(
 
     return res.render('dashboard', {
       transactions,
+      user: await database('users').first(),
       title: 'Dashboard',
     });
   }),

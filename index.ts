@@ -4,6 +4,8 @@ import session from 'express-session';
 import flash from 'express-flash-message';
 import { routes } from './src/routes';
 import { parseDate } from './src/utils/date.util';
+import { ServerErrorException } from './src/exceptions/server-error.exception';
+import { BaseException } from './src/core/server/exception';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -40,8 +42,13 @@ app.use(
     res: express.Response,
     next: express.NextFunction,
   ) => {
+    if (err instanceof BaseException) {
+      return err.render(req, res);
+    }
+
     console.log(err);
-    return res.status(500).render('errors/500');
+
+    return new ServerErrorException(err.message).render(req, res);
   },
 );
 
