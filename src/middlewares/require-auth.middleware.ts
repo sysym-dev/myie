@@ -11,6 +11,8 @@ export async function requireAuth(
   try {
     const user = await findById(1);
 
+    req.user = user;
+
     next();
   } catch (err) {
     next(
