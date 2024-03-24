@@ -21,7 +21,7 @@ router
   .post(
     requireAuth,
     validateSchema(createTransactionSchema, {
-      key: 'create-transaction-error',
+      errorKey: 'create-transaction-error',
     }),
     handleRequest(async (req, res) => {
       await createTransaction(req.user, req.body);
