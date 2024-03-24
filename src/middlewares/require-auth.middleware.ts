@@ -9,7 +9,13 @@ export async function requireAuth(
   next: express.NextFunction,
 ) {
   try {
-    const user = await findById(1);
+    const { isLoggedIn, userId } = req.session;
+
+    if (!isLoggedIn || !userId) {
+      throw new UnauthorizedException();
+    }
+
+    const user = await findById(userId);
 
     req.user = user;
 
