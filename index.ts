@@ -41,7 +41,9 @@ app.use(
     next: express.NextFunction,
   ) => {
     console.log(err);
-    return res.status(500).render('errors/500');
+    return res.status(500).render('errors/500', {
+      title: 'Internal Server Error',
+    });
   },
 );
 
