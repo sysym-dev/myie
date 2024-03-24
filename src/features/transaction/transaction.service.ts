@@ -30,7 +30,6 @@ export async function readTransactions(params?: {
   limit?: number;
   page?: number;
 }): Promise<Transaction[] | Paginated<Transaction>> {
-  console.log(params);
   const query = database<Transaction>('transactions');
 
   if (params?.start_at) {
@@ -56,10 +55,19 @@ export async function readTransactions(params?: {
   const rows = await query.select();
 
   if (params?.paginated) {
+    const countQuery = database('transactions');
+
+    if (params?.start_at) {
+      countQuery.where('created_at', '>=', params.start_at);
+    }
+
+    if (params?.end_at) {
+      countQuery.where('created_at', '<=', params.end_at);
+    }
+
     const [meta] =
-      await database('transactions').count<[Record<'count', number>]>(
-        '* as count',
-      );
+      await countQuery.count<[Record<'count', number>]>('* as count');
+
     const totalPages = params.limit ? Math.ceil(meta.count / params.limit) : 1;
     const currentPage = params.page ?? 1;
 
