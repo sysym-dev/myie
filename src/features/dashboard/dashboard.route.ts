@@ -30,11 +30,12 @@ router.get(
       limit: 10,
       start_at: today.startOf('day').toDate(),
       end_at: today.endOf('day').toDate(),
+      user_id: req.user.id,
     });
 
     return res.render('dashboard', {
       transactions,
-      user: await database('users').first(),
+      user: req.user,
       title: 'Dashboard',
     });
   }),

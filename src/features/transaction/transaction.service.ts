@@ -4,7 +4,9 @@ import { database } from '../../core/database/database';
 import { updateBalance } from '../user/user.service';
 import { User } from '../user/user';
 
-interface Transaction {}
+interface Transaction {
+  user_id: User['id'];
+}
 interface Paginated<T> {
   rows: T[];
   meta: {
@@ -18,10 +20,13 @@ interface Paginated<T> {
 export async function createTransaction(
   user: User,
   data: z.infer<typeof createTransactionSchema>,
-): Promise<Transaction> {
-  return await database.transaction(async (dbTransaction) => {
+): Promise<void> {
+  await database.transaction(async (dbTransaction) => {
     const transaction = await database<Transaction>('transactions')
-      .insert(data)
+      .insert({
+        ...data,
+        user_id: user.id,
+      })
       .transacting(dbTransaction);
 
     await updateBalance(
@@ -44,6 +49,7 @@ export async function readTransactions(params?: {
   paginated?: boolean;
   limit?: number;
   page?: number;
+  user_id?: User['id'];
 }): Promise<Transaction[] | Paginated<Transaction>> {
   const query = database<Transaction>('transactions');
 
@@ -53,6 +59,10 @@ export async function readTransactions(params?: {
 
   if (params?.end_at) {
     query.where('created_at', '<=', params.end_at);
+  }
+
+  if (params?.user_id) {
+    query.where('user_id', params.user_id);
   }
 
   if (params?.sort) {
