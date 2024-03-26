@@ -23,6 +23,11 @@ block content
                         option(value="") Minuman  
             div(class="control")
                 input(class="input" type="text" placeholder="Tags")
+        <span class="tag is-medium"> Tag label </span>
+        div(class="field")
+            label(class="label") Amount
+            div(class="control")
+                input(class="input" type="text" placeholder="Tags" id="tags")
         div(class="field")
             label(class="label") Amount
             div(class="control")
@@ -36,3 +41,38 @@ block content
                 button(class="button is-primary") Save
             div(class="control")
                 a(href="/" class="button") Cancel
+
+block script
+    script(src="https://cdn.jsdelivr.net/npm/@yaireo/tagify")
+    script.
+        var inputElem = document.querySelector('#tags') // the 'input' element which will be transformed into a Tagify component
+        var tagify = new Tagify(inputElem, {
+        // A list of possible tags. This setting is optional if you want to allow
+        // any possible tag to be added without suggesting any to the user.
+        whitelist: ['foo', 'bar', 'and baz', 0, 1, 2]
+        })
+
+block head
+    style.
+        .input {
+            --tag-bg: #f5f5f5;
+            --placeholder-color: #bbb;
+            --tags-focus-border-color: #485fc7;
+            --tag-pad: calc(.5em - 1px) calc(.75em - 1px);
+            --tag-border-radius: 4px;
+            --tag-text-color: #4a4a4a;
+        }
+        .input .tagify__input {
+            margin: 0;
+            line-height: 1.5;
+        }
+        .input .tagify__tag div {
+            padding: 0.2em 0.5em;
+            font-size: 1rem;
+        }
+        .input.tagify--focus {
+            box-shadow: 0 0 0 .125em rgba(72,95,199,.25);
+        }
+        .input.tagify--focus:hover {
+            border-color: #485fc7;
+        }
