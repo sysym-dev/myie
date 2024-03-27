@@ -56,6 +56,7 @@ block head
     style.
         .input {
             --tag-bg: #f5f5f5;
+            --tag-hover: #f5f5f5;
             --placeholder-color: #bbb;
             --tags-focus-border-color: #485fc7;
             --tag-pad: calc(.5em - 1px) calc(.75em - 1px);
@@ -66,6 +67,9 @@ block head
             margin: 0;
             line-height: 1.5;
         }
+        .input .tagify__tag {
+            margin-block: 5px 0;
+        }
         .input .tagify__tag div {
             padding: 0.2em 0.5em;
             font-size: 1rem;
@@ -75,4 +79,7 @@ block head
         }
         .input.tagify--focus:hover {
             border-color: #485fc7;
+        }
+        .input.tagify {
+            height: auto;
         }
