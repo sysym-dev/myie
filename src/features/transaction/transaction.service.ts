@@ -1,11 +1,19 @@
 import { z } from 'zod';
-import { createTransactionSchema } from './schemas/create.schema';
 import { database } from '../../core/database/database';
 import { updateBalance } from '../user/user.service';
 import { User } from '../user/user';
+import { findOrCreate } from '../transaction-category/transaction-category.service';
+import { TransactionCategory } from '../transaction-category/transaction-category';
 
 interface Transaction {
   user_id: User['id'];
+  category_id: TransactionCategory['id'];
+}
+interface CreateTransactionData {
+  amount: number;
+  type: 'income' | 'expense';
+  category?: string;
+  category_id?: TransactionCategory['id'];
 }
 interface Paginated<T> {
   rows: T[];
@@ -19,9 +27,17 @@ interface Paginated<T> {
 
 export async function createTransaction(
   user: User,
-  data: z.infer<typeof createTransactionSchema>,
+  data: CreateTransactionData,
 ): Promise<void> {
   await database.transaction(async (dbTransaction) => {
+    if (data.category) {
+      const category = await findOrCreate(user, { name: data.category });
+
+      console.log(category);
+
+      data.category_id = category.id;
+    }
+
     const transaction = await database<Transaction>('transactions')
       .insert({
         ...data,

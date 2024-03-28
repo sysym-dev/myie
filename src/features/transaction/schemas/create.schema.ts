@@ -11,4 +11,9 @@ export const createTransactionSchema = z.object({
     invalid_type_error: 'type must be income or expense',
     required_error: 'type required',
   }),
+  category: z
+    .string({
+      invalid_type_error: 'category must be a string',
+    })
+    .optional(),
 });
