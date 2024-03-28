@@ -5,13 +5,16 @@ import { User } from '../user/user';
 import { findOrCreate } from '../transaction-category/transaction-category.service';
 import { TransactionCategory } from '../transaction-category/transaction-category';
 
+type TransactionType = 'income' | 'expense';
 interface Transaction {
+  amount: number;
+  type: TransactionType;
   user_id: User['id'];
   category_id: TransactionCategory['id'];
 }
 interface CreateTransactionData {
   amount: number;
-  type: 'income' | 'expense';
+  type: TransactionType;
   category?: string;
   category_id?: TransactionCategory['id'];
 }
@@ -33,14 +36,14 @@ export async function createTransaction(
     if (data.category) {
       const category = await findOrCreate(user, { name: data.category });
 
-      console.log(category);
-
       data.category_id = category.id;
     }
 
     const transaction = await database<Transaction>('transactions')
       .insert({
-        ...data,
+        amount: data.amount,
+        type: data.type,
+        category_id: data.category_id,
         user_id: user.id,
       })
       .transacting(dbTransaction);
