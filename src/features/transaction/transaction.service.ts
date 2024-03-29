@@ -1,4 +1,3 @@
-import { z } from 'zod';
 import { database } from '../../core/database/database';
 import { updateBalance } from '../user/user.service';
 import { User } from '../user/user';
@@ -81,7 +80,7 @@ export async function readTransactions(params?: {
   }
 
   if (params?.user_id) {
-    query.where('user_id', params.user_id);
+    query.where('transactions.user_id', params.user_id);
   }
 
   if (params?.sort) {
@@ -96,7 +95,19 @@ export async function readTransactions(params?: {
     query.offset((params.page - 1) * (params?.limit ?? 1));
   }
 
-  const rows = await query.select();
+  const rows = await query
+    .leftJoin(
+      'transaction_categories',
+      'transactions.category_id',
+      'transaction_categories.id',
+    )
+    .select(
+      'transactions.id as id',
+      'transactions.type as type',
+      'transactions.amount as amount',
+      'transactions.created_at as created_at',
+      'transaction_categories.name as category_name',
+    );
 
   if (params?.paginated) {
     const countQuery = database('transactions');
