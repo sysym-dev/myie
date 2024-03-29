@@ -1,9 +1,19 @@
 extends layouts/app
 
 block content
-    div(class="box")
-        h1(class="title")=formatCurrency(user.balance)
-        p(class="subtitle") Balance
+    div(class="grid")
+        div(class="cell")
+            div(class="box")
+                h1(class="title")=formatCurrency(user.balance)
+                p(class="subtitle") Balance
+        div(class="cell")
+            div(class="box")
+                h1(class="title")=formatCurrency(userStats.income)
+                p(class="subtitle") Income
+        div(class="cell")
+            div(class="box")
+                h1(class="title")=formatCurrency(userStats.expense)
+                p(class="subtitle") Expense
     div(class="block")
         h1(class="title") Today transaction
         p(class="subtitle")=parseDate().format('YYYY/MM/DD')
