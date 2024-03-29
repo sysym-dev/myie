@@ -16,6 +16,7 @@ block content
                     th Timestamp
                     th Type
                     th Amount
+                    th Category
             tbody 
                 if !transactions.rows.length
                     tr 
@@ -27,6 +28,8 @@ block content
                             td
                                 span(class=`tag ${transaction.type === 'income' ? 'is-success' : 'is-danger'}`)=transaction.type
                             td=formatCurrency(transaction.amount)
+                            - const category_name = transaction.category_name ?? '-'
+                            td=category_name
         nav(class="pagination")
             if transactions.meta.hasPrev
                 a(href=`?page=${transactions.meta.currentPage - 1}` class="pagination-previous") Previous
