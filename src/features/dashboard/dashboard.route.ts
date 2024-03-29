@@ -23,7 +23,7 @@ router.get(
   validateSchema(readSchema, { path: 'query' }),
   handleRequest(async (req: RequestQuery<z.infer<typeof readSchema>>, res) => {
     const today = parseDate();
-    const transactions = await readTransactions({
+    const transactions = await readTransactions(req.user, {
       sort: {
         column: 'created_at',
         direction: 'desc',
@@ -33,7 +33,6 @@ router.get(
       limit: 10,
       start_at: today.startOf('day').toDate(),
       end_at: today.endOf('day').toDate(),
-      user_id: req.user.id,
     });
     const userStats = await getUserStats(req.user);
 

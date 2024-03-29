@@ -17,9 +17,13 @@ interface CreateTransactionData {
   category?: string;
   category_id?: TransactionCategory['id'];
 }
-interface Paginated<T> {
+interface TransactionFilter {
+  start_at?: Date;
+  end_at?: Date;
+}
+interface Paginated<T, M = {}> {
   rows: T[];
-  meta: {
+  meta: M & {
     totalPages: number;
     currentPage: number;
     hasPrev: boolean;
@@ -57,19 +61,24 @@ export async function createTransaction(
   });
 }
 
-export async function readTransactions(params?: {
-  start_at?: Date;
-  end_at?: Date;
-  sort?: {
-    column: 'created_at';
-    direction: 'asc' | 'desc';
-  };
-  paginated?: boolean;
-  limit?: number;
-  page?: number;
-  user_id?: User['id'];
-}): Promise<Transaction[] | Paginated<Transaction>> {
-  const query = database<Transaction>('transactions');
+export async function readTransactions(
+  user: User,
+  params?: TransactionFilter & {
+    sort?: {
+      column: 'created_at';
+      direction: 'asc' | 'desc';
+    };
+    paginated?: boolean;
+    limit?: number;
+    page?: number;
+  },
+): Promise<
+  Transaction[] | Paginated<Transaction, { income: number; expense: number }>
+> {
+  const query = database<Transaction>('transactions').where(
+    'transactions.user_id',
+    user.id,
+  );
 
   if (params?.start_at) {
     query.where('created_at', '>=', params.start_at);
@@ -77,10 +86,6 @@ export async function readTransactions(params?: {
 
   if (params?.end_at) {
     query.where('created_at', '<=', params.end_at);
-  }
-
-  if (params?.user_id) {
-    query.where('transactions.user_id', params.user_id);
   }
 
   if (params?.sort) {
@@ -126,9 +131,16 @@ export async function readTransactions(params?: {
     const totalPages = params.limit ? Math.ceil(meta.count / params.limit) : 1;
     const currentPage = params.page ?? 1;
 
+    const { income, expense } = await getUserStats(user, {
+      start_at: params.start_at,
+      end_at: params.end_at,
+    });
+
     return {
       rows,
       meta: {
+        income,
+        expense,
         totalPages,
         currentPage,
         hasNext: currentPage < totalPages,
@@ -140,14 +152,29 @@ export async function readTransactions(params?: {
   return rows;
 }
 
-export async function getUserStats(user: User): Promise<{
+export async function getUserStats(
+  user: User,
+  params?: TransactionFilter,
+): Promise<{
   income: number;
   expense: number;
 }> {
-  const stats = await database('transactions')
+  const query = database('transactions')
     .where('user_id', user.id)
-    .groupBy('type')
-    .select('type', database.raw('sum(amount) as amount'));
+    .groupBy('type');
+
+  if (params?.start_at) {
+    query.where('created_at', '>=', params.start_at);
+  }
+
+  if (params?.end_at) {
+    query.where('created_at', '<=', params.end_at);
+  }
+
+  const stats = await query.select(
+    'type',
+    database.raw('sum(amount) as amount'),
+  );
 
   const [income, expense] = stats;
 
