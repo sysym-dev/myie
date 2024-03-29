@@ -1,21 +1,43 @@
 extends layouts/app
 
 block content
-    div(class="box")
-        h1(class="title")=formatCurrency(user.balance)
-        p(class="subtitle") Balance
+    h1(class="title") Summary
+    p(class="subtitle") All Time Summary
+    div(class="grid")
+        div(class="cell")
+            div(class="box")
+                h1(class="title")=formatCurrency(user.balance)
+                p(class="subtitle") Balance
+        div(class="cell")
+            div(class="box")
+                h1(class="title")=formatCurrency(userStats.income)
+                p(class="subtitle") Income
+        div(class="cell")
+            div(class="box")
+                h1(class="title")=formatCurrency(userStats.expense)
+                p(class="subtitle") Expense
     div(class="block")
-        h1(class="title") Today transaction
+        h1(class="title") Today Transaction
         p(class="subtitle")=parseDate().format('YYYY/MM/DD')
         div(class="block")
             a(href="transactions/create")
                 button(class="button is-primary") Add Transaction
+        div(class="grid")
+            div(class="cell")
+                div(class="box")
+                    h1(class="title")=formatCurrency(transactions.meta.income)
+                    p(class="subtitle") Income Today
+            div(class="cell")
+                div(class="box")
+                    h1(class="title")=formatCurrency(transactions.meta.expense)
+                    p(class="subtitle") Expense Today
         table(class="table is-fullwidth is-bordered is-hoverable")
             thead
                 tr 
                     th Timestamp
                     th Type
                     th Amount
+                    th Category
             tbody 
                 if !transactions.rows.length
                     tr 
@@ -27,6 +49,8 @@ block content
                             td
                                 span(class=`tag ${transaction.type === 'income' ? 'is-success' : 'is-danger'}`)=transaction.type
                             td=formatCurrency(transaction.amount)
+                            - const category_name = transaction.category_name ?? '-'
+                            td=category_name
         nav(class="pagination")
             if transactions.meta.hasPrev
                 a(href=`?page=${transactions.meta.currentPage - 1}` class="pagination-previous") Previous

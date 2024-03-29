@@ -1,5 +1,8 @@
 import { Router } from 'express';
-import { readTransactions } from '../transaction/transaction.service';
+import {
+  getUserStats,
+  readTransactions,
+} from '../transaction/transaction.service';
 import { validateSchema } from '../../middlewares/validate-schema.middleware';
 import { z } from 'zod';
 import { RequestQuery } from '../../core/server/request';
@@ -20,7 +23,7 @@ router.get(
   validateSchema(readSchema, { path: 'query' }),
   handleRequest(async (req: RequestQuery<z.infer<typeof readSchema>>, res) => {
     const today = parseDate();
-    const transactions = await readTransactions({
+    const transactions = await readTransactions(req.user, {
       sort: {
         column: 'created_at',
         direction: 'desc',
@@ -31,10 +34,12 @@ router.get(
       start_at: today.startOf('day').toDate(),
       end_at: today.endOf('day').toDate(),
     });
+    const userStats = await getUserStats(req.user);
 
     return res.render('dashboard', {
       transactions,
-      user: await database('users').first(),
+      userStats,
+      user: req.user,
       title: 'Dashboard',
     });
   }),
