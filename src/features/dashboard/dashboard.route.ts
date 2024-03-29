@@ -1,5 +1,8 @@
 import { Router } from 'express';
-import { readTransactions } from '../transaction/transaction.service';
+import {
+  getUserStats,
+  readTransactions,
+} from '../transaction/transaction.service';
 import { validateSchema } from '../../middlewares/validate-schema.middleware';
 import { z } from 'zod';
 import { RequestQuery } from '../../core/server/request';
@@ -32,9 +35,11 @@ router.get(
       end_at: today.endOf('day').toDate(),
       user_id: req.user.id,
     });
+    const userStats = await getUserStats(req.user);
 
     return res.render('dashboard', {
       transactions,
+      userStats,
       user: req.user,
       title: 'Dashboard',
     });

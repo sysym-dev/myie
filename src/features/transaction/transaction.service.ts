@@ -139,3 +139,20 @@ export async function readTransactions(params?: {
 
   return rows;
 }
+
+export async function getUserStats(user: User): Promise<{
+  income: number;
+  expense: number;
+}> {
+  const stats = await database('transactions')
+    .where('user_id', user.id)
+    .groupBy('type')
+    .select('type', database.raw('sum(amount) as amount'));
+
+  const [income, expense] = stats;
+
+  return {
+    income: income.amount,
+    expense: expense.amount,
+  };
+}
