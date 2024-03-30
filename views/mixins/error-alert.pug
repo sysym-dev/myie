@@ -1,0 +1,7 @@
+mixin error-alert(key)
+    - const errors = getFlashMessages(key)
+    if errors.length
+        div(class="notification is-danger")
+            ul
+                each msg in errors
+                    li=msg
