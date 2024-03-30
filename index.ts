@@ -6,6 +6,8 @@ import { routes } from './src/routes';
 import { parseDate } from './src/utils/date.util';
 import { ServerErrorException } from './src/exceptions/server-error.exception';
 import { BaseException } from './src/core/server/exception';
+import RedisStore from 'connect-redis';
+import { redis } from './src/core/redis/redis';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -17,6 +19,9 @@ app.set('view engine', 'pug');
 
 app.use(
   session({
+    store: new RedisStore({
+      client: redis,
+    }),
     secret: process.env.SESSION_SECRET || 'secret',
     resave: false,
     saveUninitialized: true,
@@ -52,6 +57,12 @@ app.use(
   },
 );
 
-app.listen(port, () => {
-  console.log(`app listen in ${port}`);
-});
+async function main() {
+  await redis.connect();
+
+  app.listen(port, () => {
+    console.log(`app listen in ${port}`);
+  });
+}
+
+main();
