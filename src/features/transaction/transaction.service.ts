@@ -176,6 +176,13 @@ export async function getUserStats(
     database.raw('sum(amount) as amount'),
   );
 
+  if (!stats.length) {
+    return {
+      income: 0,
+      expense: 0,
+    };
+  }
+
   const [income, expense] = stats;
 
   return {
