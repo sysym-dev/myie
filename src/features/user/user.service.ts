@@ -1,7 +1,7 @@
-import { Knex } from 'knex';
 import { database } from '../../core/database/database';
 import { User } from './user';
 import { RecordNotFoundException } from '../../exceptions/record-not-found.exception';
+import { WithTransaction } from '../../core/database/transaction';
 
 export async function updateBalance(
   user: User,
@@ -9,9 +9,7 @@ export async function updateBalance(
     type: 'income' | 'expense';
     amount: number;
   },
-  options: {
-    transaction: Knex.Transaction;
-  },
+  options: Required<WithTransaction>,
 ) {
   const query = database('users').where('id', user.id);
 

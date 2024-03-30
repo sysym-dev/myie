@@ -1,7 +1,9 @@
+import { Knex } from 'knex';
 import { database } from '../../core/database/database';
 import { RecordNotFoundException } from '../../exceptions/record-not-found.exception';
 import { User } from '../user/user';
 import { TransactionCategory } from './transaction-category';
+import { WithTransaction } from '../../core/database/transaction';
 
 interface CreateTransactionCategoryData {
   name: string;
@@ -10,24 +12,33 @@ interface CreateTransactionCategoryData {
 export async function findOrCreate(
   user: User,
   data: CreateTransactionCategoryData,
+  options?: WithTransaction,
 ): Promise<TransactionCategory> {
-  const category = await findTransactionCategoryByName(user, data.name);
+  const category = await findTransactionCategoryByName(
+    user,
+    data.name,
+    options,
+  );
 
   if (category) {
     return category;
   }
 
-  return await createTransactionCategory(user, data);
+  return await createTransactionCategory(user, data, options);
 }
 
 export async function findTransactionCategory(
   user: User,
   id: TransactionCategory['id'],
+  options?: WithTransaction,
 ): Promise<TransactionCategory> {
-  const category = await database<TransactionCategory>('transaction_categories')
+  const query = database<TransactionCategory>('transaction_categories')
     .where('user_id', user.id)
-    .where('id', id)
-    .first();
+    .where('id', id);
+
+  const category = options?.transaction
+    ? await query.transacting(options.transaction).first()
+    : await query.first();
 
   if (!category) {
     throw new RecordNotFoundException();
@@ -39,25 +50,33 @@ export async function findTransactionCategory(
 export async function findTransactionCategoryByName(
   user: User,
   name: string,
+  options?: WithTransaction,
 ): Promise<TransactionCategory | undefined> {
-  const category = await database<TransactionCategory>('transaction_categories')
+  const query = database<TransactionCategory>('transaction_categories')
     .where('user_id', user.id)
-    .where('name', name)
-    .first();
+    .where('name', name);
 
-  return category;
+  return options?.transaction
+    ? await query.transacting(options.transaction).first()
+    : await query.first();
 }
 
 export async function createTransactionCategory(
   user: User,
   data: CreateTransactionCategoryData,
+  options?: WithTransaction,
 ): Promise<TransactionCategory> {
-  const [id] = await database<TransactionCategory>(
-    'transaction_categories',
-  ).insert({
-    name: data.name,
-    user_id: user.id,
-  });
+  const query = database<TransactionCategory>('transaction_categories');
 
-  return await findTransactionCategory(user, id);
+  const [id] = options?.transaction
+    ? await query.transacting(options.transaction).insert({
+        name: data.name,
+        user_id: user.id,
+      })
+    : await query.insert({
+        name: data.name,
+        user_id: user.id,
+      });
+
+  return await findTransactionCategory(user, id, options);
 }
