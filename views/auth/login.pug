@@ -1,14 +1,11 @@
 extends ../layouts/app
 
+include ../mixins/error-alert
+
 block content
     h1(class="title") Login
     p(class="subtitle") Login to your account
-    - const errors = getFlashMessages('login-error')
-    if errors.length
-        div(class="notification is-danger")
-            ul
-                each msg in errors
-                    li=msg
+    +error-alert('login-error')
     form(action="/login" method="post")
         div(class="field")
             label(class="label") Email

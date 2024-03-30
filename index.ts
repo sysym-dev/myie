@@ -36,6 +36,8 @@ app.use(
 
 app.use(express.urlencoded({ extended: true }));
 
+app.use('/public', express.static('public'));
+
 routes.forEach((route) => {
   app.use(route);
 });

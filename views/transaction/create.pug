@@ -1,14 +1,11 @@
 extends ../layouts/app
 
+include ../mixins/error-alert
+
 block content
     h1(class="title") New transaction
     p(class="subtitle") 16/03/2024
-    - const errors = getFlashMessages('create-transaction-error')
-    if errors.length
-        div(class="notification is-danger")
-            ul
-                each msg in errors
-                    li=msg
+    +error-alert('create-transaction-error')
     form(action="/transactions/create" method="post") 
         div(class="field is-grouped")
             div(class="control")
