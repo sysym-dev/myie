@@ -37,7 +37,11 @@ export async function createTransaction(
 ): Promise<void> {
   await database.transaction(async (dbTransaction) => {
     if (data.category) {
-      const category = await findOrCreate(user, { name: data.category });
+      const category = await findOrCreate(
+        user,
+        { name: data.category },
+        { transaction: dbTransaction },
+      );
 
       data.category_id = category.id;
     }
@@ -186,7 +190,7 @@ export async function getUserStats(
   const [income, expense] = stats;
 
   return {
-    income: income.amount,
-    expense: expense.amount,
+    income: income?.amount ?? 0,
+    expense: expense?.amount ?? 0,
   };
 }
