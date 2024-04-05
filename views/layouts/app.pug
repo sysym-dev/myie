@@ -1,17 +1,13 @@
-doctype html
-html(lang="en")
-    head
-        meta(charset="UTF-8")
-        meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        title Myie - #{title}
-        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/1.0.0/css/bulma.min.css")
-        link(rel="apple-touch-icon" sizes="180x180" href="public/favicon/apple-touch-icon.png")
-        link(rel="icon" type="image/png" sizes="32x32" href="public/favicon/favicon-32x32.png")
-        link(rel="icon" type="image/png" sizes="16x16" href="public/favicon/favicon-16x16.png")
-        link(rel="manifest" href="public/favicon/site.webmanifest")
-        block head
-    body
-        section(class="section")
-            div(class="container")
-                block content
-    block script
+extends base
+
+block content
+    nav(class="navbar")
+        div(class="navbar-brand")
+            a(class="navbar-item" href="/") MyIE
+        div(class="navbar-end")
+            div(class="navbar-item")
+                div(class="buttons")
+                    a(class="button is light" href="/logout") Logout
+    section(class="section")
+        div(class="container")
+            block app-content

@@ -37,5 +37,11 @@ router
       }
     }),
   );
+router.get('/logout', handleRequest((req, res) => {
+  req.session.isLoggedIn = false
+  req.session.userId = null
+
+  return res.redirect('/login')
+}))
 
 export { router as authRoute };
