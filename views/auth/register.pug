@@ -1,0 +1,25 @@
+extends ../layouts/auth
+
+include ../mixins/error-alert
+
+block auth-content
+    h1(class="title") Register
+    p(class="subtitle") Create your new account
+    +error-alert('register-error')
+    form(action="/register" method="post")
+        div(class="field")
+            label(class="label") Email
+            div(class="control")
+                input(class="input" type="email" name="email" placeholder="Email")
+        div(class="field")
+            label(class="label") Password
+            div(class="control")
+                input(class="input" type="password" name="password" placeholder="Password")
+        div(class="field")
+            label(class="label") Password Confirmation
+            div(class="control")
+                input(class="input" type="password" name="password_confirmation" placeholder="Password Confirmation")
+        div(class="field")
+            button(class="button is-primary") Register
+        p Already have account? 
+            a(href="/login") Login Here
