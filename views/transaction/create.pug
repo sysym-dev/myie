@@ -4,7 +4,7 @@ include ../mixins/error-alert
 
 block app-content
     h1(class="title") New transaction
-    p(class="subtitle") 16/03/2024
+    p(class="subtitle")=parseDate().format('YYYY/MM/DD')
     +error-alert('create-transaction-error')
     form(action="/transactions/create" method="post") 
         div(class="field is-grouped")
