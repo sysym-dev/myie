@@ -130,8 +130,7 @@ export async function readTransactions(
       countQuery.where('created_at', '<=', params.end_at);
     }
 
-    const [meta] =
-      await countQuery.count<Count>('* as count');
+    const [meta] = await countQuery.count<Count>('* as count');
 
     const totalPages = params.limit ? Math.ceil(meta.count / params.limit) : 1;
     const currentPage = params.page ?? 1;

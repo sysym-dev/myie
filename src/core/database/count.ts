@@ -1,1 +1,1 @@
-export type Count = [Record<'count', number>]
+export type Count = [Record<'count', number>];

@@ -40,39 +40,45 @@ router
       }
     }),
   );
-router.get('/logout', handleRequest((req, res) => {
-  req.session.isLoggedIn = false
-  req.session.userId = null
+router.get(
+  '/logout',
+  handleRequest((req, res) => {
+    req.session.isLoggedIn = false;
+    req.session.userId = null;
 
-  return res.redirect('/login')
-}))
-router.route('/register')
-  .get(handleRequest((req, res) => {
-    return res.render('auth/register', {
-      title: 'Reister'
-    })
-  }))
+    return res.redirect('/login');
+  }),
+);
+router
+  .route('/register')
+  .get(
+    handleRequest((req, res) => {
+      return res.render('auth/register', {
+        title: 'Reister',
+      });
+    }),
+  )
   .post(
     validateSchema(registerSchema, { errorKey: 'register-error' }),
     handleRequest(async (req, res) => {
       try {
         const user = await newUser({
           email: req.body.email,
-          password: req.body.password
-        })
-  
-        req.session.userId = user.id
-        req.session.isLoggedIn = true
-  
-        return res.redirect('/')
+          password: req.body.password,
+        });
+
+        req.session.userId = user.id;
+        req.session.isLoggedIn = true;
+
+        return res.redirect('/');
       } catch (err) {
         if (err instanceof DuplicateEntryException) {
-          res.flash('register-error', err.message)
+          res.flash('register-error', err.message);
 
-          return res.redirect('/register')
+          return res.redirect('/register');
         }
       }
-    })
-  )
+    }),
+  );
 
 export { router as authRoute };
