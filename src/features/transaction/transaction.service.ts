@@ -3,6 +3,7 @@ import { updateBalance } from '../user/user.service';
 import { User } from '../user/user';
 import { findOrCreate } from '../transaction-category/transaction-category.service';
 import { TransactionCategory } from '../transaction-category/transaction-category';
+import { Count } from '../../core/database/count';
 
 type TransactionType = 'income' | 'expense';
 interface Transaction {
@@ -130,7 +131,7 @@ export async function readTransactions(
     }
 
     const [meta] =
-      await countQuery.count<[Record<'count', number>]>('* as count');
+      await countQuery.count<Count>('* as count');
 
     const totalPages = params.limit ? Math.ceil(meta.count / params.limit) : 1;
     const currentPage = params.page ?? 1;
