@@ -43,5 +43,11 @@ router.get('/logout', handleRequest((req, res) => {
 
   return res.redirect('/login')
 }))
+router.route('/register')
+  .get(handleRequest((req, res) => {
+    return res.render('auth/register', {
+      title: 'Reister'
+    })
+  }))
 
 export { router as authRoute };
