@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.ts",
-    "migration:dev": "ts-node bin/migration.ts",
-    "seed:dev": "ts-node bin/seed.ts",
+    "migration": "ts-node bin/migration.ts",
+    "seed": "ts-node bin/seed.ts",
     "build": "tsc",
     "start": "NODE_ENV=production node dist/index.js"
   },
